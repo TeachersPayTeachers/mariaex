@@ -1,13 +1,13 @@
-defmodule Mariaex.Connection do
+defmodule Sphinxex.Connection do
   @moduledoc """
-  Main API for Mariaex. This module handles the connection to .
+  Main API for Sphinxex. This module handles the connection to .
   """
 
-  defdelegate start_link(opts), to: Mariaex
-  defdelegate query(conn, statement), to: Mariaex
-  defdelegate query(conn, statement, params), to: Mariaex
-  defdelegate query(conn, statement, params, opts), to: Mariaex
-  defdelegate query!(conn, statement), to: Mariaex
-  defdelegate query!(conn, statement, params), to: Mariaex
-  defdelegate query!(conn, statement, params, opts), to: Mariaex
+  defdelegate start_link(opts), to: Sphinxex
+  defdelegate query(conn, statement), to: Sphinxex
+  defdelegate query(conn, statement, params), to: Sphinxex
+  defdelegate query(conn, statement, params, opts), to: Sphinxex
+  defdelegate query!(conn, statement), to: Sphinxex
+  defdelegate query!(conn, statement, params), to: Sphinxex
+  defdelegate query!(conn, statement, params, opts), to: Sphinxex
 end
