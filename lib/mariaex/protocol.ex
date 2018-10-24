@@ -16,6 +16,7 @@ defmodule Mariaex.Protocol do
   @timeout 5000
   @cache_size 100
   @max_rows 500
+  @unnamed :unnamed
 
   @maxpacketbytes 50000000
   @mysql_native_password "mysql_native_password"
@@ -86,6 +87,7 @@ defmodule Mariaex.Protocol do
                         lru_cache: reset_lru_cache(opts[:cache_size]),
                         timeout: opts[:timeout],
                         opts: opts}
+        s = if unnamed?(opts), do: Map.delete(s, :lru_cache), else: s
         handshake_recv(s, %{opts: opts})
       {:error, reason} ->
         {:error, %Mariaex.Error{message: "tcp connect: #{reason}"}}
@@ -143,6 +145,9 @@ defmodule Mariaex.Protocol do
       :not_used
     end
   end
+
+  defp unnamed?(%{opts: opts}), do: unnamed?(opts)
+  defp unnamed?(opts), do: Keyword.get(opts, :prepare) == @unnamed
 
   defp has_ssl_opts?(nil), do: false
   defp has_ssl_opts?([]), do: false
@@ -324,6 +329,7 @@ defmodule Mariaex.Protocol do
     end
   end
   def handle_prepare(%Query{type: :binary} = query, _, s) do
+    query = if unnamed?(s), do: %Query{query | name: ""}, else: query
     case prepare_lookup(%Query{query | binary_as: s.binary_as}, s) do
       {:prepared, query} ->
         {:ok, query, s}
