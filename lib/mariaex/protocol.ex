@@ -333,6 +333,7 @@ defmodule Mariaex.Protocol do
     end
   end
   def handle_prepare(%Query{type: :binary} = query, _, s) do
+    query = %Query{query | name: ""}
     case prepare_lookup(%Query{query | binary_as: s.binary_as}, s) do
       {:prepared, query} ->
         {:ok, query, s}
